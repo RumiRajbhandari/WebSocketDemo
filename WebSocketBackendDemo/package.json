@@ -4,12 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "knex seed:run --knexfile src/knexfile.js",
+    "migrate": "knex migrate:latest --knexfile src/knexfile.js",
+    "make:seeder": "knex seed:make --knexfile src/knexfile.js",
+    "make:migration": "knex migrate:make --knexfile src/knexfile.js",
+    "start:dev": "nodemon --watch .env --watch src --exec babel-node src --source-maps"
   },
   "author": "rumi",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "bookshelf": "^0.15.1",
+    "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "joi": "^14.3.1",
+    "knex": "^0.19.2",
+    "pg": "^7.12.1",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4"
   }
 }
