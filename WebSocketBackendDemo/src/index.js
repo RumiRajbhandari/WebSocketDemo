@@ -17,7 +17,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
 app.use('/api', routes);
 
-
 //Socket setup
 var io = socket(server);
 io.on('connection', function(socket){

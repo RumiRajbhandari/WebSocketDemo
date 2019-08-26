@@ -7,8 +7,7 @@
 exports.up =  function(knex) {
   return knex.schema.createTable('inventory', table => {
     table.increments();
-    table.integer('sku_id').notNullable();
-    table.string('sku_name').notNullable();
+    table.integer('sku_id').unsigned().notNullable().references('skus.id');
     table.integer('quantity').defaultTo(0);
     table.integer('outlet_id').notNullable();
     table.string('outlet_name').notNullable();
