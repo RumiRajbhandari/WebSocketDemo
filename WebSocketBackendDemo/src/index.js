@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import routes from './routes';
+import * as ordersServices from './services/ordersServices'
 
 var express = require('express');
 var socket = require('socket.io')
@@ -41,4 +42,9 @@ io.on('connection', function(socket){
         io.sockets.emit('chatting',msg)
 
     });
+
+    socket.on('orders', async function(ordersModel){
+        const res = await ordersServices.saveOrders(ordersModel)
+        io.sockets.emit('orders', res)
+    })
 });
