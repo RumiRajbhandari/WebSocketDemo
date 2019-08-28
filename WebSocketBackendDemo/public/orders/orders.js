@@ -20,6 +20,7 @@ btn.addEventListener('click', function(){
 });
 
 socket.on('orders', function(data){
-    const ordersModel = JSON.stringify(data);
-    output.innerHTML += '<p><strong>' + ordersModel+ ': </strong></p>'
+    console.log('front end msg is ', data)
+    const message = JSON.stringify(data);
+    output.innerHTML += '<p><strong>' + message+ '</strong></p>'
 })
