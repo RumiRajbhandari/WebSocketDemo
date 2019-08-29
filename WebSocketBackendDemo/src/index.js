@@ -43,8 +43,10 @@ io.on('connection', function(socket){
 
     });
 
-    socket.on('orders', async function(ordersModel){
-        const res = await ordersServices.saveOrders(ordersModel)
-        io.sockets.emit('orders', res)
+    socket.on('orders', function(ordersModel){
+        ordersServices.saveOrders(ordersModel).then( response => {
+            io.sockets.emit('orders', response)
+        }).catch(err => console.log(err))
+       
     })
 });

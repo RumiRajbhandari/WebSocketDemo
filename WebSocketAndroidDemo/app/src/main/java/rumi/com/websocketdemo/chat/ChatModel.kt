@@ -1,4 +1,4 @@
-package rumi.com.websocketdemo
+package rumi.com.websocketdemo.chat
 
 class ChatModel(
     var username: String,

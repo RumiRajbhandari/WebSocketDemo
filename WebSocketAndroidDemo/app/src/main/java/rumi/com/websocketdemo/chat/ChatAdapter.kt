@@ -1,9 +1,10 @@
-package rumi.com.websocketdemo
+package rumi.com.websocketdemo.chat
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import rumi.com.websocketdemo.R
 import rumi.com.websocketdemo.databinding.ItemChatBinding
 
 class ChatAdapter(

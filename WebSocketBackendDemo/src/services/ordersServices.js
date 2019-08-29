@@ -26,11 +26,10 @@ export async function saveOrders(ordersModel){
 
 export async function checkAndUpdateStock(ordersModel){
     
-    const stock_quantity = await getStockQuantity(ordersModel.sku_id)
-    console.log('stock quantity', stock_quantity)
-    if(stock_quantity >= ordersModel.quantity){
+    const stock_available = await getStockQuantity(ordersModel.sku_id, ordersModel.quantity)
+    if(stock_available){
         createOrders(ordersModel)
-        updateStock(ordersModel.sku_id, (stock_quantity-ordersModel.quantity))
+        updateStock(ordersModel.sku_id, ordersModel.quantity)
         return 'Order placed'
     }
     else{
@@ -38,16 +37,18 @@ export async function checkAndUpdateStock(ordersModel){
     }
 }
 
-async function getStockQuantity(sku_id){
-    const stock = await  new Stock()
-    .where('sku_id', sku_id)
-    .query(qb => qb.column('quantity'))
-    .fetch()
-    return stock.toJSON().quantity;
+async function getStockQuantity(sku_id,qty){
+    return new Stock().query(qb => {
+        qb.where('sku_id', sku_id).andWhere('quantity', '>', qty)
+    }).fetch().then(stock => {
+        debugger;
+        return stock ? true : false;
+    })
+    //return stock.toJSON().quantity;
 }
 
 async function updateStock(sku_id, quantity){
     await knex('stocks')
      .where({sku_id: sku_id})
-     .update({quantity: quantity})
+     .decrement({quantity: quantity})
 }
