@@ -44,7 +44,9 @@ io.on('connection', function(socket){
     });
 
     socket.on('orders', function(ordersModel){
+        console.log('orders model is ', ordersModel)
         ordersServices.saveOrders(ordersModel).then( response => {
+            console.log('emit orders', response)
             io.sockets.emit('orders', response)
         }).catch(err => console.log(err))
        

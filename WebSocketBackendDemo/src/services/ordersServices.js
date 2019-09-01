@@ -26,25 +26,38 @@ export async function saveOrders(ordersModel){
 
 export async function checkAndUpdateStock(ordersModel){
     
-    const stock_available = await getStockQuantity(ordersModel.sku_id, ordersModel.quantity)
+    const stock_available = await isStockQuantityAvailable(ordersModel.sku_id, ordersModel.quantity)
     if(stock_available){
         createOrders(ordersModel)
         updateStock(ordersModel.sku_id, ordersModel.quantity)
-        return 'Order placed'
+        const updatedQuantity = await getStockQuantity(ordersModel.sku_id)
+        return {
+            msg: 'Order placed',
+            skuId: ordersModel.sku_id,
+            outletId: ordersModel.outlet_id,
+            quantity: updatedQuantity
+        }
     }
     else{
         return 'Quantity exceeded'
     }
 }
 
-async function getStockQuantity(sku_id,qty){
+async function isStockQuantityAvailable(sku_id,qty){
     return new Stock().query(qb => {
         qb.where('sku_id', sku_id).andWhere('quantity', '>', qty)
     }).fetch().then(stock => {
-        debugger;
         return stock ? true : false;
     })
     //return stock.toJSON().quantity;
+}
+
+async function getStockQuantity(sku_id){
+    const stock = await  new Stock()
+    .where('sku_id', sku_id)
+    .query(qb => qb.column('quantity'))
+    .fetch()
+    return stock.toJSON().quantity;
 }
 
 async function updateStock(sku_id, quantity){

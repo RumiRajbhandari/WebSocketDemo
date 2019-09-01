@@ -12,11 +12,13 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.btn_order
 import kotlinx.android.synthetic.main.activity_order.*
 import rumi.com.websocketdemo.R
+import rumi.com.websocketdemo.db.WebSocketDatabase
 import java.net.URISyntaxException
 
-class OrderActivity : AppCompatActivity() {
+class OrderActivity : AppCompatActivity(), OrdersContract.View {
 
     lateinit var socket: Socket
+    lateinit var presenter: OrdersPresenter
 
     companion object{
         fun getIntent(context: Context) = Intent(context, OrderActivity::class.java)
@@ -30,6 +32,9 @@ class OrderActivity : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
             title = "Order"
         }
+        presenter = OrdersPresenter(this)
+        presenter.initializeData()
+
         connectToServer()
 
         btn_order.setOnClickListener {
@@ -59,7 +64,6 @@ class OrderActivity : AppCompatActivity() {
 
                 }
             }
-
             listenOrderEvents()
 
         } catch (e: URISyntaxException) {
@@ -81,8 +85,12 @@ class OrderActivity : AppCompatActivity() {
     private fun listenOrderEvents(){
         socket.on("orders"){
             runOnUiThread{
-                println("order response is $it")
+                println("order response is ${it[0]}")
             }
         }
+    }
+
+    override fun getContext(): Context {
+        return this
     }
 }
