@@ -5,7 +5,7 @@ import android.content.Context
 interface OrdersContract {
     interface Presenter{
         fun initializeData()
-        fun updateStocks(outletId: Int, quantity: Int)
+        fun updateStocks(skuId: Int, quantity: Int)
     }
 
     interface View{

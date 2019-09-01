@@ -39,7 +39,13 @@ export async function checkAndUpdateStock(ordersModel){
         }
     }
     else{
-        return 'Quantity exceeded'
+        const updatedQuantity = await getStockQuantity(ordersModel.sku_id)
+        return {
+            msg: 'Quantity exceeded',
+            skuId: ordersModel.sku_id,
+            outletId: ordersModel.outlet_id,
+            quantity: updatedQuantity
+        }
     }
 }
 

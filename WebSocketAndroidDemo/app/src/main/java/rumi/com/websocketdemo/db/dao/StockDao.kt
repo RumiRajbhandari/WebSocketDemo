@@ -14,8 +14,8 @@ interface StockDao {
     @Query("select * from stocks")
     fun getStock(): List<StockEntity>
 
-    @Query("update stocks set quantity = :quantity")
-    fun updateStocks(quantity: Int)
+    @Query("update stocks set quantity = :quantity where sku_id = :skuId")
+    fun updateStocks(skuId: Int, quantity: Int)
 
     @Query("select count(*) from stocks where sku_id = :skuId")
     fun getStockCount(skuId: Int): Int

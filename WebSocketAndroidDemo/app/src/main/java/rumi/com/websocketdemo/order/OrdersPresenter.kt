@@ -26,7 +26,7 @@ class OrdersPresenter(val view: OrdersContract.View) : OrdersContract.Presenter 
     }
 
 
-    override fun updateStocks(outletId: Int, quantity: Int) {
-
+    override fun updateStocks(skuId: Int, quantity: Int) {
+        stockDao.updateStocks(skuId, quantity)
     }
 }

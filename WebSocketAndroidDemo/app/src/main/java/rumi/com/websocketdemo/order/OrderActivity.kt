@@ -9,8 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.github.nkzawa.socketio.client.IO
 import com.github.nkzawa.socketio.client.Socket
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import kotlinx.android.synthetic.main.activity_main.btn_order
 import kotlinx.android.synthetic.main.activity_order.*
+import org.json.JSONObject
 import rumi.com.websocketdemo.R
 import rumi.com.websocketdemo.db.WebSocketDatabase
 import java.net.URISyntaxException
@@ -77,7 +79,6 @@ class OrderActivity : AppCompatActivity(), OrdersContract.View {
         val outletId = et_outlet_id.text.toString().toInt()
         val ordersModel = OrdersModel(skuId, quantity, outletId)
         val req = Gson().toJson(ordersModel)
-        Toast.makeText(this, "button clicked $req", Toast.LENGTH_SHORT).show()
         socket.emit("orders",req)
 
     }
@@ -85,7 +86,10 @@ class OrderActivity : AppCompatActivity(), OrdersContract.View {
     private fun listenOrderEvents(){
         socket.on("orders"){
             runOnUiThread{
-                println("order response is ${it[0]}")
+                val gson = Gson()
+                val responseModel = gson.fromJson(it[0].toString(), OrderResponseModel::class.java)
+                presenter.updateStocks(responseModel.skuId, responseModel.quantity)
+                Toast.makeText(this, "${responseModel.msg}. Only ${responseModel.quantity} no is in stock", Toast.LENGTH_SHORT).show()
             }
         }
     }
